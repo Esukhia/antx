@@ -1,4 +1,4 @@
-from src.annotation_transfer import transfer
+from antf.annotation_transfer import transfer
 import pytest
 
 
