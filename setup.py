@@ -4,11 +4,12 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="antf",  # Replace with your own username
+    name="antx",  # Replace with your own username
     version="0.0.1",
     author="Ngawang Thrinley, Tenzin Kaldan",
     author_email="esukhiadev@gmail.com",
     description="Transfer annotations from source text to destination using diff match patch.",
+    py_modules=["antx"],
     long_description=long_description,
     long_description_content_type="text/markdown",
     license="Apache2",
