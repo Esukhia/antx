@@ -1,5 +1,6 @@
-from antx import transfer
 import pytest
+
+from antx import transfer
 
 
 @pytest.fixture(scope="module")
