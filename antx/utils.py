@@ -15,8 +15,8 @@ BASE_DIR = Path.home() / ".antx"
 
 def get_bin_metadata():
     """Return platfrom_type and binary_name."""
-    if "Window" in PLATFORM_TYPE:
-        return "window", "dmp.exe"
+    if "Windows" in PLATFORM_TYPE:
+        return "windows", "dmp.exe"
     elif "Drawin" in PLATFORM_TYPE:
         return "macos", "dmp"
     else:
@@ -38,12 +38,12 @@ def get_dmp_exe_path():
     out_dir = BASE_DIR / "bin"
     out_dir.mkdir(exist_ok=True, parents=True)
 
-    playform_type, binary_name = get_bin_metadata()
+    platform_type, binary_name = get_bin_metadata()
     binary_path = out_dir / binary_name
     if binary_path.is_file():
         return binary_path
 
-    url, version = get_dmp_bin_url(playform_type)
+    url, version = get_dmp_bin_url(platform_type)
     print(f"[INFO] Downloading node-dmp-cli-{version} ...")
     r = requests.get(url, stream=True, timeout=50)
 
@@ -80,8 +80,8 @@ class optimized_diff_match_patch:
         tmpdir = Path(tempfile.gettempdir())
         text1_path = tmpdir / "text1.txt"
         text2_path = tmpdir / "text2.txt"
-        text1_path.write_text(text1)
-        text2_path.write_text(text2)
+        text1_path.write_text(text1, encoding='utf-8')
+        text2_path.write_text(text2, encoding='utf-8')
         return str(text1_path), str(text2_path)
 
     @staticmethod
@@ -103,7 +103,7 @@ class optimized_diff_match_patch:
             [self.binary_path, "diff", text1_path, text2_path], stdout=subprocess.PIPE
         )
         stdout = process.communicate()[0]
-        diffs = json.loads(stdout)
+        diffs = json.loads(stdout, encoding='utf-8')
         diffs = self._unescape_lr(diffs)
         self._delete_text(text1_path, text2_path)
         return diffs
