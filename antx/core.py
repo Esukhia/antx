@@ -20,7 +20,7 @@ def get_diffs(text1, text2, optimized):
     Returns:
         list: list of diffs
     """
-    print("[INFO] Computating diffs ...")
+    print("[INFO] Computing diffs ...")
     if optimized:
         dmp = optimized_diff_match_patch()
     else:
