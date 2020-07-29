@@ -92,10 +92,11 @@ class optimized_diff_match_patch:
     @staticmethod
     def _unescape_lr(diffs):
         """Unescape the line-return."""
-        return [
-            (diff_type, diff_text.replace("\\n", "\n"))
-            for diff_type, diff_text in diffs
-        ]
+        for diff_type, diff_text in diffs:
+            if "Windows" in PLATFORM_TYPE:
+                yield (diff_type, diff_text.replace("\r\\n", "\n"))
+            else:
+                yield (diff_type, diff_text.replace('\\n', '\n'))
 
     def diff_main(self, text1, text2):
         text1_path, text2_path = self._save_text(text1, text2)

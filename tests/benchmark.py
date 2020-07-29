@@ -20,13 +20,13 @@ def get_target():
     target = (data_dir / "in" / "target_plain.txt").read_text(encoding="utf-8")
     return target
 
-@timed(unit="min")
+@timed(unit="s")
 def test_ann_transfer_non_optimized():
     transfer(
         get_source(), get_pattern(), get_target(), "txt", optimized=False
     )
 
-@timed(unit="min")
+@timed(unit="s")
 def test_ann_transfer_optimized():
     transfer(
         get_source(), get_pattern(), get_target(), "txt"
