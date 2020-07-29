@@ -1,28 +1,34 @@
 import re
 from pathlib import Path
+
 import yaml
 from diff_match_patch import diff_match_patch
+
+from .utils import optimized_diff_match_patch
 
 tofu_lower_limit = 200000
 tofu_upper_limit = 1112064
 
 
-def get_diffs(A, B):
+def get_diffs(text1, text2, optimized):
     """Compute diff between source and target with DMP.
 
     Args:
         source (str): source text
         target (str): target text
+        optimized (bool): whether to use optimized dmp with node.
     Returns:
         list: list of diffs
     """
-    print("Diff computation started...")
-    dmp = diff_match_patch()
-    dmp.Diff_Timeout = 0  # compute diff till end of file
-    diffs = dmp.diff_main(A, B)
-    diffs_list = list(map(list, diffs))
-    print("Diff computation completed")
-    return diffs_list
+    print("[INFO] Computating diffs ...")
+    if optimized:
+        dmp = optimized_diff_match_patch()
+    else:
+        dmp = diff_match_patch()
+        dmp.Diff_Timeout = 0  # compute diff till end of file
+    diffs = dmp.diff_main(text1, text2)
+    print("[INFO] Diff computed!")
+    return diffs
 
 
 def to_yaml(list_,):
@@ -42,7 +48,7 @@ def from_yaml(path):
 
     Args:
         vol_path (path): base path object
-        type (string): 
+        type (string):
     """
     diffs = yaml.safe_load(path.read_text(encoding="utf-8"))
     diffs_list = list(diffs)
@@ -59,7 +65,7 @@ def to_text(diffs):
 
 def tag_to_tofu(content, annotations):
     """Annotations found in content will be converted to tofu id.
-    
+
     It will help to generate cleaner diffs.A dictionionary is created to save annotation
     and its assigned tofu id in order to reconstruct new content.
 
@@ -99,8 +105,12 @@ def filter_diff(diffs_list, tofu_mapping):
             result.append([diff_type, diff_text, ""])
         elif diff_type == -1:
             # tofu-IDs are limited to 1114111
-            if re.search(f"[{chr(tofu_lower_limit)}-{chr(tofu_upper_limit)}]", diff_text):
-                anns = re.split(f"([{chr(tofu_lower_limit)}-{chr(tofu_upper_limit)}])", diff_text)
+            if re.search(
+                f"[{chr(tofu_lower_limit)}-{chr(tofu_upper_limit)}]", diff_text
+            ):
+                anns = re.split(
+                    f"([{chr(tofu_lower_limit)}-{chr(tofu_upper_limit)}])", diff_text
+                )
                 for ann in anns:
                     if ann:
                         if tofu_mapping.get(ann):
@@ -111,25 +121,26 @@ def filter_diff(diffs_list, tofu_mapping):
     return result
 
 
-def transfer(source, patterns, target, output="diff"):
+def transfer(source, patterns, target, output="diff", optimized=True):
     """Extract annotations from with regex patterns and transfer to target.
 
     Arguments:
         source {str} -- text version containing the annotations to transfer
         patterns {list} -- ['annotation type', '(regex to detect the annotations)'] Put in () to preserve, without to delete.
-        target {str} -- text that will receive the transfered annotation 
+        target {str} -- text that will receive the transfered annotation
 
     Keyword Arguments:
         output {str} -- ["diff", "yaml" or "txt"] (default: {'diff'})
+        optimized {bool} -- whether to used node for dmp (default: {True})
 
     Returns:
         [diff, yaml or txt] -- returns a diff with 3 types of strings: 0 overlaps, 1 target and -1 source.
-        Can also return the diff in yaml or a string containing target+annotations 
+        Can also return the diff in yaml or a string containing target+annotations
     """
     print(f"Annotation transfer started...")
 
     tofu_source, tofu_mapping = tag_to_tofu(source, patterns)
-    diffs = get_diffs(tofu_source, target)
+    diffs = get_diffs(tofu_source, target, optimized)
 
     filterred_diff = filter_diff(diffs, tofu_mapping)
 
@@ -140,4 +151,3 @@ def transfer(source, patterns, target, output="diff"):
     elif output == "txt":
         result = to_text(filterred_diff)
     return result
-

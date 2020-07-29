@@ -20,7 +20,12 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    install_requires=["diff-match-patch==20181111", "PyYAML==5.1.2", "regex==2020.5.7",],
+    install_requires=[
+        "diff-match-patch==20181111",
+        "PyYAML==5.1.2",
+        "regex==2020.5.7",
+        "requests==2.24.0",
+    ],
     python_requires=">=3.6",
     tests_require=["pytest"],
 )

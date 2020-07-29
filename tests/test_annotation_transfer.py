@@ -1,5 +1,6 @@
-from antx import transfer
 import pytest
+
+from antx import transfer
 
 
 @pytest.fixture(scope="module")
@@ -43,15 +44,8 @@ def target_text():
 
 
 @pytest.fixture(scope="module")
-def annotation_patterns():
-    return [["pages", "(\[\d+[ab]\])"], ["lines", "\[\d+.\.\d\]"]]
-
-
-def test_ann_transfer(source_text, target_text, annotation_patterns):
-    annotated = transfer(source_text, annotation_patterns, target_text, "txt")
-    assert (
-        annotated
-        == """[1a]༄༅#
+def expected():
+    return """[1a]༄༅#
 [1b]༅། །རྒྱ་གར་སྐད་དུ། ཀརྨ་ཤ་ཏ་ཀ། བོད་སྐད་དུ། ལས་བརྒྱ་
 ཐམ་པ་པ། བམ་པོ་དང་པོ། ཐམས་ཅད་མཁྱེན་པ་ལ་ཕྱག་འཚལ་ལོ། །གང་
 ལས་འཇིག་རྟེན་བླ་མ་བདེ་གཤེགས་ཐོས་པའི་སྒོ་ནས་རབ་སྙན་བརྟན་པའི་གསུང་
@@ -71,4 +65,24 @@ def test_ann_transfer(source_text, target_text, annotation_patterns):
 ཏུ་རྩེ་ཞིང་དགའ་ལ་དགའ་མགུར་སྤྱོད་དོ། །དེ་རྩེ་ཞིང་དགའ་ལ་དགའ་མགུར་
 སྤྱོད་པ་ལས་ཕྱིས་དེའི་ཆུང་མ་ལ་#བུ་ཆགས་ནས་དེ་ཟླ་བ་དགུའམ་བཅུ་ལོན་པ་
 """
+
+
+@pytest.fixture(scope="module")
+def annotation_patterns():
+    return [["pages", r"(\[\d+[ab]\])"], ["lines", r"\[\d+.\.\d\]"]]
+
+
+def test_ann_transfer_non_optimized(
+    source_text, target_text, annotation_patterns, expected
+):
+    annotated = transfer(
+        source_text, annotation_patterns, target_text, "txt", optimized=False
     )
+    assert annotated == expected
+
+
+def test_ann_transfer_optimized(
+    source_text, target_text, annotation_patterns, expected
+):
+    annotated = transfer(source_text, annotation_patterns, target_text, "txt")
+    assert annotated == expected
