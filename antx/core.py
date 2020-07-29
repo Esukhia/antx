@@ -56,6 +56,14 @@ def from_yaml(path):
 
 
 def to_text(diffs):
+    """Diff type of non -1 will be appended to generate a text which contains transfered annotations.
+
+    Args:
+        diffs (list): list diff tuples containing diff type and diff value
+
+    Returns:
+        str: annotation transferd text
+    """
     result = ""
     for diff in diffs:
         if diff[0] != -1:
@@ -98,6 +106,15 @@ def tag_to_tofu(content, annotations):
 
 
 def filter_diff(diffs_list, tofu_mapping):
+    """Filter the diffs by accepting the diff text belonging to pattern.
+
+    Args:
+        diffs_list (list): list of tuple containing diff type and diff text
+        tofu_mapping (dit): dictionary containing key as tofu id and value as annotation info
+
+    Returns:
+        list: filtered diff list
+    """
     print("Transfering annotations...")
     result = []
     for i, (diff_type, diff_text) in enumerate(diffs_list):
