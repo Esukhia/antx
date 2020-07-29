@@ -1,4 +1,5 @@
 import pytest
+
 from antx.utils import optimized_diff_match_patch
 
 

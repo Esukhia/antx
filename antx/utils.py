@@ -1,4 +1,5 @@
 import io
+import json
 import platform
 import stat
 import subprocess
@@ -43,7 +44,7 @@ def get_dmp_exe_path():
         return binary_path
 
     url, version = get_dmp_bin_url(playform_type)
-    print(f"[INFO] Downloading dmp-{version} ...")
+    print(f"[INFO] Downloading node-dmp-cli-{version} ...")
     r = requests.get(url, stream=True, timeout=50)
 
     # attempt 50 times to download the zip
@@ -89,9 +90,10 @@ class optimized_diff_match_patch:
         Path(text2_path).unlink()
 
     @staticmethod
-    def restore_newlines(diffs):
+    def _unescape_lr(diffs):
+        """Unescape the line-return."""
         return [
-            (diff_type, diff_text.replace("\\-n", "\n"))
+            (diff_type, diff_text.replace("\\n", "\n"))
             for diff_type, diff_text in diffs
         ]
 
@@ -101,7 +103,7 @@ class optimized_diff_match_patch:
             [self.binary_path, "diff", text1_path, text2_path], stdout=subprocess.PIPE
         )
         stdout = process.communicate()[0]
-        diffs = eval(stdout)
-        diffs = self.restore_newlines(diffs)
+        diffs = json.loads(stdout)
+        diffs = self._unescape_lr(diffs)
         self._delete_text(text1_path, text2_path)
         return diffs
