@@ -5,8 +5,8 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="antx",  # Replace with your own username
-    version="0.0.1",
-    author="Ngawang Thrinley, Tenzin Kaldan",
+    version="0.1.1",
+    author="Ngawang Thrinley, Tenzin, Tenzin Kaldan",
     author_email="esukhiadev@gmail.com",
     description="Transfer annotations from source text to destination using diff match patch.",
     py_modules=["antx"],
