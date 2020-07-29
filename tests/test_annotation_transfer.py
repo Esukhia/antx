@@ -69,7 +69,7 @@ def expected():
 
 @pytest.fixture(scope="module")
 def annotation_patterns():
-    return [["pages", "(\[\d+[ab]\])"], ["lines", "\[\d+.\.\d\]"]]
+    return [["pages", r"(\[\d+[ab]\])"], ["lines", r"\[\d+.\.\d\]"]]
 
 
 def test_ann_transfer_non_optimized(
