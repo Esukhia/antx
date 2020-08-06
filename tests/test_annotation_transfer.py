@@ -1,7 +1,7 @@
 # coding=utf-8
 
 import pytest
-
+from pathlib import Path
 from antx import transfer
 
 
@@ -74,17 +74,19 @@ def annotation_patterns():
     return [["pages", r"(\[\d+[ab]\])"], ["lines", r"\[\d+.\.\d\]"]]
 
 
-def test_ann_transfer_non_optimized(
-    source_text, target_text, annotation_patterns, expected
-):
-    annotated = transfer(
-        source_text, annotation_patterns, target_text, "txt", optimized=False
-    )
+def test_ann_transfer_non_optimized(source_text, target_text, annotation_patterns, expected):
+    annotated = transfer(source_text, annotation_patterns, target_text, "txt", optimized=False)
     assert annotated == expected
 
 
-def test_ann_transfer_optimized(
-    source_text, target_text, annotation_patterns, expected
-):
+def test_ann_transfer_optimized(source_text, target_text, annotation_patterns, expected):
     annotated = transfer(source_text, annotation_patterns, target_text, "txt")
     assert annotated == expected
+
+
+if __name__ == "__main__":
+    derg = Path("./test/derge.txt").read_text()
+    trans = Path("./test/transkribus.txt").read_text()
+    annotation = [["pages", r"(\[\d+[ab]\])"], ["lines", r"\[\d+.\.\d\]"]]
+    tar = transfer(derg, annotation, trans, "txt", optimized=True)
+    Path("./trans-der.txt").write_text()
