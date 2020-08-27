@@ -137,7 +137,6 @@ def filter_diff(diffs_list, tofu_mapping):
                             result.append([-1, ann, ""])
     return result
 
-
 def transfer(source, patterns, target, output="diff", optimized=True):
     """Extract annotations from with regex patterns and transfer to target.
 
