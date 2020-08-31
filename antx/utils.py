@@ -17,7 +17,7 @@ def get_bin_metadata():
     """Return platfrom_type and binary_name."""
     if "Windows" in PLATFORM_TYPE:
         return "windows", "dmp.exe"
-    elif "Drawin" in PLATFORM_TYPE:
+    elif "Darwin" in PLATFORM_TYPE:
         return "macos", "dmp"
     else:
         return "linux", "dmp"
