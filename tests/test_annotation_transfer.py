@@ -1,9 +1,8 @@
 # coding=utf-8
 
-from os import replace
 import pytest
-from pathlib import Path
 from antx import transfer
+from antx.ann_patterns import HFML_ANN_PATTERN
 
 
 @pytest.fixture(scope="module")
@@ -75,11 +74,30 @@ def annotation_patterns():
     return [["pages", r"(\[\d+[ab]\])"], ["lines", r"\[\d+.\.\d\]"]]
 
 
-def test_ann_transfer_non_optimized(source_text, target_text, annotation_patterns, expected):
-    annotated = transfer(source_text, annotation_patterns, target_text, "txt", optimized=False)
+def test_ann_transfer_non_optimized(
+    source_text, target_text, annotation_patterns, expected
+):
+    annotated = transfer(
+        source_text, annotation_patterns, target_text, "txt", optimized=False
+    )
     assert annotated == expected
 
 
-def test_ann_transfer_optimized(source_text, target_text, annotation_patterns, expected):
+def test_ann_transfer_optimized(
+    source_text, target_text, annotation_patterns, expected
+):
     annotated = transfer(source_text, annotation_patterns, target_text, "txt")
     assert annotated == expected
+
+
+def test_transfer_hfml_tags():
+    layer_1 = "<񉏠k1ཀཀཀཀ>\n ཁཁཁཁ"
+    layer_2 = "ཀཀཀཀ\n <񉏠auཁཁཁཁ>"
+    layer_3 = "ཀཀཀཀ\n ཁཁཁཁ\n <񉏠gགགགg>"
+    base = "ཀཀཀ\n ཁཁཁ\n གགགག"
+    expected = "<񉏠k1ཀཀཀ>\n <񉏠auཁཁཁ>\n <񉏠gགགགགg>"
+
+    for layer in [layer_1, layer_2, layer_3]:
+        base = transfer(layer, HFML_ANN_PATTERN, base, "txt")
+
+    assert base == expected
