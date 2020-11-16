@@ -22,10 +22,45 @@ new_target = transfer(source_text, annotations, target_text, output="txt", optim
 ```
 **source_text** := contains source text
 
-**target_text** := contains target text
-
 **annotations** := contains list of annotations in source text that you want to transfer to target text
+
+**target_text** := contains target text
 
 **output** := Flag to indicate type of output. It can be txt or yaml.
 
 **optimized** := Boolean flag to choose whether you want to proceed with **node dmp** or not. By default it is set to true. 
+
+**Example**
+
+```
+source_text =  """༄༅། །ཕྱག་ཆེན་སྔོན་འགྲོ་བཞི་སྦྱོར་དང་དངོས་གཞིའི་ཁྲིད་རིམ་མདོར་བསྡུས་ངེས་དོན་སྒྲོན་མེ་ཞེས་བྱ་བ་བཞུགས་སོ། །
+<𰵀auམཛད་པ་པོ། འཇམ་མགོན་ཀོང་སྤྲུལ་བློ་གྲོས་མཐའ་ཡས། །>
+༄༅། །ཕྱག་ཆེན་སྔོན་འགྲོ་བཞི་སྦྱོར་དང་དངོས་གཞིའི་ཁྲིད་རིམ་མདོར་བསྡུས་ངེས་དོན་སྒྲོན་མེ་ཞེས་བྱ་བ་བཞུགས་སོ། །
+""
+```
+```
+target_text =  """༄༅། །ཕྱག་ཆེན་སྔོན་འགྲོ་བཞི་སྦྱོར་དང་དངོས་གཞིའི་ཁྲིད་རིམ་མདོར་བསྡུས་ངེས་དོན་སྒྲོན་མེ་ཞེས་བྱ་བ་བཞུགས་སོ། །
+མཛད་པ་པོ། འཇམ་མགོན་ཀོང་སྤྲུལ་བློ་གྲོས་མཐའ་ཡས། །
+༄༅། །ཕྱག་ཆེན་སྔོན་འགྲོ་བཞི་སྦྱོར་དང་དངོས་གཞིའི་ཁྲིད་རིམ་མདོར་བསྡུས་ངེས་དོན་སྒྲོན་མེ་ཞེས་བྱ་བ་བཞུགས་སོ། །
+༄༅། །གྲུབ་བརྒྱའི་སྤྱི་མེས་མར་མི་དྭགས་གསུམ་ནས། །དཔལ་ལྡན་དུས་གསུམ་མཁྱེན་པའི་བཀའ་བརྒྱུད་ནི།
+"""
+```
+```
+annotations = [['author_start', r"(\<[𰵀-󴉱]?au)"], ['author_end', r"(\>)"]]
+```
+```
+result = transfer(src, annotations, trg, output="txt")
+
+Annotation transfer started...
+Mapping annotations to tofu-IDs
+[INFO] Computing diffs ...
+[INFO] Diff computed!
+Transfering annotations...
+```
+```
+print(result)
+༄༅། །ཕྱག་ཆེན་སྔོན་འགྲོ་བཞི་སྦྱོར་དང་དངོས་གཞིའི་ཁྲིད་རིམ་མདོར་བསྡུས་ངེས་དོན་སྒྲོན་མེ་ཞེས་བྱ་བ་བཞུགས་སོ། །
+<𰵀auམཛད་པ་པོ། འཇམ་མགོན་ཀོང་སྤྲུལ་བློ་གྲོས་མཐའ་ཡས། །>
+༄༅། །ཕྱག་ཆེན་སྔོན་འགྲོ་བཞི་སྦྱོར་དང་དངོས་གཞིའི་ཁྲིད་རིམ་མདོར་བསྡུས་ངེས་དོན་སྒྲོན་མེ་ཞེས་བྱ་བ་བཞུགས་སོ། །
+༄༅། །གྲུབ་བརྒྱའི་སྤྱི་མེས་མར་མི་དྭགས་གསུམ་ནས། །དཔལ་ལྡན་དུས་གསུམ་མཁྱེན་པའི་བཀའ་བརྒྱུད་ནི།
+```
