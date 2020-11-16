@@ -46,7 +46,9 @@ def get_diffs(text1, text2, optimized):
     return diffs
 
 
-def to_yaml(list_,):
+def to_yaml(
+    list_,
+):
     """Dump list to yaml and write the yaml to a file on mentioned path.
 
     Args:
@@ -151,6 +153,7 @@ def filter_diff(diffs_list, tofu_mapping):
                         else:
                             result.append([-1, ann, ""])
     return result
+
 
 def transfer(source, patterns, target, output="diff", optimized=True):
     """Extract annotations from with regex patterns and transfer to target.
