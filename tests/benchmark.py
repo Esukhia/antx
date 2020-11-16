@@ -6,7 +6,8 @@ from horology import timed
 
 from antx import transfer
 
-data_dir = Path("C:/Users/trinley/github/annotation_transfer/tests/test1")
+# data_dir = Path("C:/Users/trinley/github/annotation_transfer/tests/test1")
+data_dir = Path('./tests/test1')
 
 def get_source():
     source = (data_dir / "in" / "source_pos.txt").read_text(encoding="utf-8")

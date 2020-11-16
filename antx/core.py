@@ -1,4 +1,5 @@
 import re
+import pickle
 from pathlib import Path
 
 import yaml
@@ -9,7 +10,21 @@ from .utils import optimized_diff_match_patch
 tofu_lower_limit = 200000
 tofu_upper_limit = 1112064
 
+def memoize(func):
+    cache = dict()
 
+    def memoized_func(*args, **kwargs):
+        parameters = (pickle.dumps(args), pickle.dumps(kwargs))
+        if parameters in cache:
+            return cache[parameters]
+        else:
+            result = func(*args, **kwargs)
+            cache[parameters] = result
+            return result
+
+    return memoized_func
+
+@memoize
 def get_diffs(text1, text2, optimized):
     """Compute diff between source and target with DMP.
 
@@ -156,6 +171,7 @@ def transfer(source, patterns, target, output="diff", optimized=True):
     print(f"Annotation transfer started...")
 
     tofu_source, tofu_mapping = tag_to_tofu(source, patterns)
+    
     diffs = get_diffs(tofu_source, target, optimized)
 
     filterred_diff = filter_diff(diffs, tofu_mapping)
