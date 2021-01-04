@@ -74,16 +74,7 @@ def annotation_patterns():
     return [["pages", r"(\[\d+[ab]\])"], ["lines", r"\[\d+.\.\d\]"]]
 
 
-def test_ann_transfer_non_optimized(
-    source_text, target_text, annotation_patterns, expected
-):
-    annotated = transfer(
-        source_text, annotation_patterns, target_text, "txt", optimized=False
-    )
-    assert annotated == expected
-
-
-def test_ann_transfer_optimized(
+def test_ann_transfer(
     source_text, target_text, annotation_patterns, expected
 ):
     annotated = transfer(source_text, annotation_patterns, target_text, "txt")

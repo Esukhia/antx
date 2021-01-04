@@ -10,22 +10,17 @@ tofu_lower_limit = 200000
 tofu_upper_limit = 1112064
 
 
-def get_diffs(text1, text2, optimized):
+def get_diffs(text1, text2):
     """Compute diff between source and target with DMP.
 
     Args:
         source (str): source text
         target (str): target text
-        optimized (bool): whether to use optimized dmp with node.
     Returns:
         list: list of diffs
     """
     print("[INFO] Computing diffs ...")
-    if optimized:
-        dmp = optimized_diff_match_patch()
-    else:
-        dmp = diff_match_patch()
-        dmp.Diff_Timeout = 0  # compute diff till end of file
+    dmp = optimized_diff_match_patch()
     diffs = dmp.diff_main(text1, text2)
     print("[INFO] Diff computed!")
     return diffs
@@ -140,7 +135,7 @@ def filter_diff(diffs_list, tofu_mapping):
     return result
 
 
-def transfer(source, patterns, target, output="diff", optimized=True):
+def transfer(source, patterns, target, output="diff",):
     """Extract annotations from with regex patterns and transfer to target.
 
     Arguments:
@@ -159,7 +154,7 @@ def transfer(source, patterns, target, output="diff", optimized=True):
     print(f"Annotation transfer started...")
 
     tofu_source, tofu_mapping = tag_to_tofu(source, patterns)
-    diffs = get_diffs(tofu_source, target, optimized)
+    diffs = get_diffs(tofu_source, target)
 
     filterred_diff = filter_diff(diffs, tofu_mapping)
 
