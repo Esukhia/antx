@@ -75,9 +75,6 @@ def annotation_patterns():
     return [["pages", r"(\[\d+[ab]\])"], ["lines", r"\[\d+.\.\d\]"]]
 
 
-<<<<<<< HEAD
-def test_ann_transfer(
-=======
 def test_ann_transfer_optimized(
     source_text, target_text, annotation_patterns, expected
 ):
@@ -86,7 +83,6 @@ def test_ann_transfer_optimized(
 
 
 def test_ann_transfer_using_cache(
->>>>>>> 5aab57e9c0eae452a99bc681542ecd54c5ae24a9
     source_text, target_text, annotation_patterns, expected
 ):
     annotated = transfer(

@@ -138,11 +138,7 @@ def filter_diff(diffs_list, tofu_mapping):
     return result
 
 
-<<<<<<< HEAD
-def transfer(source, patterns, target, output="diff",):
-=======
 def transfer(source, patterns, target, output="txt", replaced=True):
->>>>>>> 5aab57e9c0eae452a99bc681542ecd54c5ae24a9
     """Extract annotations from with regex patterns and transfer to target.
 
     Arguments:
@@ -161,9 +157,6 @@ def transfer(source, patterns, target, output="txt", replaced=True):
     print(f"Annotation transfer started...")
     result = ''
     tofu_source, tofu_mapping = tag_to_tofu(source, patterns)
-<<<<<<< HEAD
-    diffs = get_diffs(tofu_source, target)
-=======
     md5 = hashlib.md5(str.encode(source + target + str(patterns)))
     hash_value = md5.hexdigest()
     cache_diff_path = Path(CACHE_DIR) / str(hash_value)
@@ -181,7 +174,6 @@ def transfer(source, patterns, target, output="txt", replaced=True):
         diffs = list(get_diffs(tofu_source, target))
         pickle_diffs = pickle.dumps(diffs)
         cache_diff_path.write_bytes(pickle_diffs)
->>>>>>> 5aab57e9c0eae452a99bc681542ecd54c5ae24a9
 
     filterred_diff = filter_diff(diffs, tofu_mapping)
 
