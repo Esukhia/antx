@@ -3,9 +3,17 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+def get_version(prop, project):
+    project = Path(__file__).parent / project / "__init__.py"
+    result = re.search(
+        r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format(prop), project.read_text()
+    )
+    return result.group(1)
+
+
 setuptools.setup(
     name="antx",  # Replace with your own username
-    version="0.1.4",
+    version=get_version("__version__", "antx"),
     author="Ngawang Thrinley, Tenzin, Tenzin Kaldan",
     author_email="esukhiadev@gmail.com",
     description="Transfer annotations from source text to destination using diff match patch.",
