@@ -1,10 +1,13 @@
+import ast
 import re
+import pickle
 from pathlib import Path
+import hashlib
 
 import yaml
-from diff_match_patch import diff_match_patch
 
 from .utils import optimized_diff_match_patch
+from .config import *
 
 tofu_lower_limit = 200000
 tofu_upper_limit = 1112064
@@ -135,7 +138,11 @@ def filter_diff(diffs_list, tofu_mapping):
     return result
 
 
+<<<<<<< HEAD
 def transfer(source, patterns, target, output="diff",):
+=======
+def transfer(source, patterns, target, output="txt", replaced=True):
+>>>>>>> 5aab57e9c0eae452a99bc681542ecd54c5ae24a9
     """Extract annotations from with regex patterns and transfer to target.
 
     Arguments:
@@ -152,9 +159,29 @@ def transfer(source, patterns, target, output="diff",):
         Can also return the diff in yaml or a string containing target+annotations
     """
     print(f"Annotation transfer started...")
-
+    result = ''
     tofu_source, tofu_mapping = tag_to_tofu(source, patterns)
+<<<<<<< HEAD
     diffs = get_diffs(tofu_source, target)
+=======
+    md5 = hashlib.md5(str.encode(source + target + str(patterns)))
+    hash_value = md5.hexdigest()
+    cache_diff_path = Path(CACHE_DIR) / str(hash_value)
+    if not replaced:
+        if cache_diff_path.is_file():
+            diffs = pickle.loads(cache_diff_path.read_bytes())
+        else:
+            diffs = get_diffs(tofu_source, target)
+            pickle_diffs = pickle.dumps(list(diffs))
+            cache_diff_path.write_bytes(pickle_diffs)
+    else:
+        cache_files = list(Path(CACHE_DIR).iterdir())
+        for cache_file in cache_files:
+            cache_file.unlink()
+        diffs = list(get_diffs(tofu_source, target))
+        pickle_diffs = pickle.dumps(diffs)
+        cache_diff_path.write_bytes(pickle_diffs)
+>>>>>>> 5aab57e9c0eae452a99bc681542ecd54c5ae24a9
 
     filterred_diff = filter_diff(diffs, tofu_mapping)
 

@@ -3,6 +3,7 @@
 import pytest
 from antx import transfer
 from antx.ann_patterns import HFML_ANN_PATTERN
+from pathlib import Path
 
 
 @pytest.fixture(scope="module")
@@ -74,12 +75,24 @@ def annotation_patterns():
     return [["pages", r"(\[\d+[ab]\])"], ["lines", r"\[\d+.\.\d\]"]]
 
 
+<<<<<<< HEAD
 def test_ann_transfer(
+=======
+def test_ann_transfer_optimized(
     source_text, target_text, annotation_patterns, expected
 ):
     annotated = transfer(source_text, annotation_patterns, target_text, "txt")
     assert annotated == expected
 
+
+def test_ann_transfer_using_cache(
+>>>>>>> 5aab57e9c0eae452a99bc681542ecd54c5ae24a9
+    source_text, target_text, annotation_patterns, expected
+):
+    annotated = transfer(
+        source_text, annotation_patterns, target_text, "txt", replaced=False
+    )
+    assert annotated == expected
 
 def test_transfer_hfml_tags():
     layer_1 = "<񉏠k1ཀཀཀཀ>\n ཁཁཁཁ"
