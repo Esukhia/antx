@@ -18,7 +18,7 @@ from antx import transfer
 
 ### Transfer
 ```
-new_target = transfer(source_text, annotations, target_text, output="txt", replaced=True)
+new_target = transfer(source_text, annotations, target_text, output="txt")
 ```
 **source_text** := contains source text
 
