@@ -1,11 +1,25 @@
+import re
 import setuptools
+from pathlib import Path
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+def get_version(prop, project):
+    project = Path(__file__).parent / project / "__init__.py"
+    result = re.search(
+        r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format(prop), project.read_text()
+    )
+    return result.group(1)
+
+
 setuptools.setup(
     name="antx",  # Replace with your own username
+<<<<<<< HEAD
     version="0.1.3",
+=======
+    version=get_version("__version__", "antx"),
+>>>>>>> 50705dcca6caedc8b8b82ddadb7c9c9f300d77fd
     author="Ngawang Thrinley, Tenzin, Tenzin Kaldan",
     author_email="esukhiadev@gmail.com",
     description="Transfer annotations from source text to destination using diff match patch.",
@@ -22,9 +36,9 @@ setuptools.setup(
     ],
     install_requires=[
         "diff-match-patch==20181111",
-        "PyYAML==5.1.2",
-        "regex==2020.5.7",
-        "requests==2.24.0",
+        "PyYAML>=5.4, <6.0",
+        "regex==2020.5.7, <2021",
+        "requests>=2.24.0, <3.0",
     ],
     python_requires=">=3.6",
     tests_require=["pytest"],

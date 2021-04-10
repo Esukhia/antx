@@ -1,31 +1,29 @@
+import ast
 import re
+import pickle
 from pathlib import Path
+import hashlib
 
 import yaml
-from diff_match_patch import diff_match_patch
 
 from .utils import optimized_diff_match_patch
+from .config import *
 
 tofu_lower_limit = 200000
 tofu_upper_limit = 1112064
 
 
-def get_diffs(text1, text2, optimized):
+def get_diffs(text1, text2):
     """Compute diff between source and target with DMP.
 
     Args:
         source (str): source text
         target (str): target text
-        optimized (bool): whether to use optimized dmp with node.
     Returns:
         list: list of diffs
     """
     print("[INFO] Computing diffs ...")
-    if optimized:
-        dmp = optimized_diff_match_patch()
-    else:
-        dmp = diff_match_patch()
-        dmp.Diff_Timeout = 0  # compute diff till end of file
+    dmp = optimized_diff_match_patch()
     diffs = dmp.diff_main(text1, text2)
     print("[INFO] Diff computed!")
     return diffs
@@ -140,7 +138,7 @@ def filter_diff(diffs_list, tofu_mapping):
     return result
 
 
-def transfer(source, patterns, target, output="diff", optimized=True):
+def transfer(source, patterns, target, output="txt", replaced=True):
     """Extract annotations from with regex patterns and transfer to target.
 
     Arguments:
@@ -157,9 +155,25 @@ def transfer(source, patterns, target, output="diff", optimized=True):
         Can also return the diff in yaml or a string containing target+annotations
     """
     print(f"Annotation transfer started...")
-
+    result = ''
     tofu_source, tofu_mapping = tag_to_tofu(source, patterns)
-    diffs = get_diffs(tofu_source, target, optimized)
+    md5 = hashlib.md5(str.encode(source + target + str(patterns)))
+    hash_value = md5.hexdigest()
+    cache_diff_path = Path(CACHE_DIR) / str(hash_value)
+    if not replaced:
+        if cache_diff_path.is_file():
+            diffs = pickle.loads(cache_diff_path.read_bytes())
+        else:
+            diffs = get_diffs(tofu_source, target)
+            pickle_diffs = pickle.dumps(list(diffs))
+            cache_diff_path.write_bytes(pickle_diffs)
+    else:
+        cache_files = list(Path(CACHE_DIR).iterdir())
+        for cache_file in cache_files:
+            cache_file.unlink()
+        diffs = list(get_diffs(tofu_source, target))
+        pickle_diffs = pickle.dumps(diffs)
+        cache_diff_path.write_bytes(pickle_diffs)
 
     filterred_diff = filter_diff(diffs, tofu_mapping)
 
