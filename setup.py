@@ -15,11 +15,7 @@ def get_version(prop, project):
 
 setuptools.setup(
     name="antx",  # Replace with your own username
-<<<<<<< HEAD
-    version="0.1.3",
-=======
     version=get_version("__version__", "antx"),
->>>>>>> 50705dcca6caedc8b8b82ddadb7c9c9f300d77fd
     author="Ngawang Thrinley, Tenzin, Tenzin Kaldan",
     author_email="esukhiadev@gmail.com",
     description="Transfer annotations from source text to destination using diff match patch.",
