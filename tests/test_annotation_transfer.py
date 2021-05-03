@@ -82,14 +82,6 @@ def test_ann_transfer_optimized(
     assert annotated == expected
 
 
-def test_ann_transfer_using_cache(
-    source_text, target_text, annotation_patterns, expected
-):
-    annotated = transfer(
-        source_text, annotation_patterns, target_text, "txt", replaced=False
-    )
-    assert annotated == expected
-
 def test_transfer_hfml_tags():
     layer_1 = "<񉏠k1ཀཀཀཀ>\n ཁཁཁཁ"
     layer_2 = "ཀཀཀཀ\n <񉏠auཁཁཁཁ>"
