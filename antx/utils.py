@@ -100,7 +100,7 @@ class optimized_diff_match_patch:
             [str(self.binary_path), "diff", text1_path, text2_path], stdout=subprocess.PIPE
         )
         stdout = process.communicate()[0]
-        diffs = json.loads(stdout, encoding="utf-8")
+        diffs = json.loads(stdout)
         diffs = self._unescape_lr(diffs)
         self._delete_text(text1_path, text2_path)
         return diffs
