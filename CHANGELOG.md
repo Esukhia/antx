@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.10 (2021-05-21)
+### Fix
+* **utils:** Json.loads encoding parameter removed ([`c0269f4`](https://github.com/Esukhia/antx/commit/c0269f4230a464a5864f1163a77421f534e31bc0))
+
 ## v0.1.9 (2021-05-03)
 ### Fix
 *  save texts in tmpdir ([`a0e4f3a`](https://github.com/Esukhia/antx/commit/a0e4f3a2a3ebb7f484f288a57207a0d536cdd9f8))
