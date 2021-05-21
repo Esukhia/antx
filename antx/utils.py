@@ -24,7 +24,9 @@ def get_bin_metadata():
 
 
 def get_dmp_bin_url(platform_type):
-    response = requests.get("https://api.github.com/repos/Esukhia/node-dmp-cli/releases/latest")
+    response = requests.get(
+        "https://api.github.com/repos/Esukhia/node-dmp-cli/releases/latest"
+    )
     version = response.json()["tag_name"]
     return (
         f"https://github.com/Esukhia/node-dmp-cli/releases/download/{version}/{platform_type}.zip",
@@ -63,7 +65,9 @@ def get_dmp_exe_path():
     print(f"[INFO] Download completed!")
 
     # make the binary executable
-    binary_path.chmod(binary_path.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    binary_path.chmod(
+        binary_path.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
+    )
     return str(binary_path)
 
 
@@ -72,18 +76,13 @@ class optimized_diff_match_patch:
         self.binary_path = get_dmp_exe_path()
 
     @staticmethod
-    def _save_text(text1, text2):
-        tmpdir = Path(tempfile.gettempdir())
+    def _save_text(text1, text2, save_dir):
+        tmpdir = Path(save_dir)
         text1_path = tmpdir / "text1.txt"
         text2_path = tmpdir / "text2.txt"
         text1_path.write_text(text1, encoding="utf-8")
         text2_path.write_text(text2, encoding="utf-8")
         return str(text1_path), str(text2_path)
-
-    @staticmethod
-    def _delete_text(text1_path, text2_path):
-        Path(text1_path).unlink()
-        Path(text2_path).unlink()
 
     @staticmethod
     def _unescape_lr(diffs):
@@ -95,12 +94,13 @@ class optimized_diff_match_patch:
                 yield (diff_type, diff_text.replace("\\n", "\n"))
 
     def diff_main(self, text1, text2):
-        text1_path, text2_path = self._save_text(text1, text2)
-        process = subprocess.Popen(
-            [str(self.binary_path), "diff", text1_path, text2_path], stdout=subprocess.PIPE
-        )
-        stdout = process.communicate()[0]
-        diffs = json.loads(stdout)
-        diffs = self._unescape_lr(diffs)
-        self._delete_text(text1_path, text2_path)
-        return diffs
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            text1_path, text2_path = self._save_text(text1, text2, tmpdirname)
+            process = subprocess.Popen(
+                [str(self.binary_path), "diff", text1_path, text2_path],
+                stdout=subprocess.PIPE,
+            )
+            stdout = process.communicate()[0]
+            diffs = json.loads(stdout)
+            diffs = self._unescape_lr(diffs)
+            return diffs

@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.9 (2021-05-03)
+### Fix
+*  save texts in tmpdir ([`a0e4f3a`](https://github.com/Esukhia/antx/commit/a0e4f3a2a3ebb7f484f288a57207a0d536cdd9f8))
+
+## v0.1.8 (2021-05-03)
+### Fix
+* **version:** Version increased ([`d8436df`](https://github.com/Esukhia/antx/commit/d8436dfd424710a73cee4b9f4c0c61707e589d03))
+
 ## v0.1.7 (2021-05-03)
 ### Fix
 * **core:** Freezed diff compute feature rollback ([`9ec6ab5`](https://github.com/Esukhia/antx/commit/9ec6ab53a01c307bdf753911f525dc7b86dbaad0))
