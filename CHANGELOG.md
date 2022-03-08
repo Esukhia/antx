@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.11 (2022-03-08)
+### Fix
+* **regex:** Unfreezed regex version ([`84facc8`](https://github.com/Esukhia/antx/commit/84facc816b06cd995acf9ae325a379cfb17acba1))
+
 ## v0.1.10 (2021-05-21)
 ### Fix
 * **utils:** Json.loads encoding parameter removed ([`c0269f4`](https://github.com/Esukhia/antx/commit/c0269f4230a464a5864f1163a77421f534e31bc0))
