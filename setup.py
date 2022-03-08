@@ -33,7 +33,7 @@ setuptools.setup(
     install_requires=[
         "diff-match-patch==20181111",
         "PyYAML>=5.4, <6.0",
-        "regex==2020.5.7, <2021",
+        "regex>=2020.5.7",
         "requests>=2.24.0, <3.0",
     ],
     python_requires=">=3.6",
