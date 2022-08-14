@@ -2,11 +2,12 @@ import re
 
 import yaml
 
+import logging
+
 from .utils import optimized_diff_match_patch
 
 tofu_lower_limit = 200000
 tofu_upper_limit = 1112064
-
 
 def get_diffs(text1, text2):
     """Compute diff between source and target with DMP.
@@ -17,10 +18,10 @@ def get_diffs(text1, text2):
     Returns:
         list: list of diffs
     """
-    print("[INFO] Computing diffs ...")
+    logging.debug("[INFO] Computing diffs ...")
     dmp = optimized_diff_match_patch()
     diffs = dmp.diff_main(text1, text2)
-    print("[INFO] Diff computed!")
+    logging.debug("[INFO] Diff computed!")
     return diffs
 
 
@@ -80,7 +81,7 @@ def tag_to_tofu(content, annotations):
         str: new content containing tofu id in place of annotations.
         dict: tofu id as key and annotation as value.
     """
-    print("Mapping annotations to tofu-IDs")
+    logging.debug("Mapping annotations to tofu-IDs")
     new_content = content
     #  support
     if isinstance(annotations[0], str):
@@ -110,7 +111,7 @@ def filter_diff(diffs_list, tofu_mapping):
     Returns:
         list: filtered diff list
     """
-    print("Transfering annotations...")
+    logging.debug("Transfering annotations...")
     result = []
     for i, (diff_type, diff_text) in enumerate(diffs_list):
         if diff_type == 0 or diff_type == 1:
@@ -149,7 +150,7 @@ def transfer(source, patterns, target, output="txt"):
         [diff, yaml or txt] -- returns a diff with 3 types of strings: 0 overlaps, 1 target and -1 source.
         Can also return the diff in yaml or a string containing target+annotations
     """
-    print(f"Annotation transfer started...")
+    logging.debug("Annotation transfer started...")
     tofu_source, tofu_mapping = tag_to_tofu(source, patterns)
     diffs = get_diffs(tofu_source, target)
 

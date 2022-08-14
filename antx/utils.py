@@ -5,6 +5,7 @@ import stat
 import subprocess
 import tempfile
 import zipfile
+import logging
 from pathlib import Path
 
 import requests
@@ -44,7 +45,7 @@ def get_dmp_exe_path():
         return binary_path
 
     url, version = get_dmp_bin_url(platform_type)
-    print(f"[INFO] Downloading node-dmp-cli-{version} ...")
+    logging.info(f"Downloading node-dmp-cli-{version} ...")
     r = requests.get(url, stream=True, timeout=50)
 
     # attempt 50 times to download the zip
@@ -56,13 +57,14 @@ def get_dmp_exe_path():
         attempts += 1
 
     if not check:
+        logging.error("the .zip file couldn't be downloaded.")
         raise IOError("the .zip file couldn't be downloaded.")
     else:
         # extract the zip in the current folder
         z = zipfile.ZipFile(io.BytesIO(r.content))
         z.extractall(path=str(out_dir))
 
-    print(f"[INFO] Download completed!")
+    logging.info("Download completed!")
 
     # make the binary executable
     binary_path.chmod(
