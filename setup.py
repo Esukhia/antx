@@ -35,6 +35,6 @@ setuptools.setup(
         "PyYAML>=5.4, <6.0",
         "requests>=2.24.0, <3.0",
     ],
-    python_requires=">=3.6",
+    python_requires=">=3.8",
     tests_require=["pytest"],
 )
