@@ -2,6 +2,13 @@
 
 
 
+## v0.1.13 (2024-04-02)
+
+### Fix
+
+* fix: upgrade pyyaml version ([`ecd6a4f`](https://github.com/Esukhia/antx/commit/ecd6a4f388ba7a03f519a51a5a7d55ac8ec1273e))
+
+
 ## v0.1.12 (2023-07-24)
 
 ### Fix
